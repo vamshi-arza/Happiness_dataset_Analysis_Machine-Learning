@@ -1,0 +1,356 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+#LOADING THE DATASET
+
+```{r}
+library(wooldridge)
+
+data2<-happiness
+data2
+```
+
+
+```{r}
+str(data2)
+
+```
+The given dataset has 17137 observations and 33 variables
+
+```{r}
+summary(data2)
+
+```
+
+
+```{r}
+colSums(is.na(data2))
+
+```
+Here the rows with missing values with gwbush04 having the highest number of missing values whereas workstat has the least number of missing values with only 3
+
+```{r}
+colMeans(is.na(data2))
+
+```
+From the above data gwbush04 has the highest percentage of rows with missing value which is around ~80% and workstat with the least percentage.
+
+```{r}
+data2$prestige[is.na(data2$prestige)] <- round(mean(data2$prestige, na.rm = TRUE))
+data2$educ[is.na(data2$educ)] <- round(mean(data2$educ, na.rm = TRUE))
+data2$educ[is.na(data2$educ)] <- round(mean(data2$educ, na.rm = TRUE))
+data2$babies[is.na(data2$babies)] <- round(mean(data2$babies, na.rm = TRUE))
+data2$preteen[is.na(data2$preteen)] <- round(mean(data2$preteen, na.rm = TRUE))
+data2$teens[is.na(data2$teens)] <- round(mean(data2$teens, na.rm = TRUE))
+data2$tvhours[is.na(data2$tvhours)] <- round(mean(data2$tvhours, na.rm = TRUE))
+data2$mothfath16[is.na(data2$mothfath16)] <- round(mean(data2$mothfath16, na.rm = TRUE))
+data2$gwbush04[is.na(data2$gwbush04)] <- round(mean(data2$gwbush04, na.rm = TRUE))
+data2$gwbush00[is.na(data2$gwbush00)] <- round(mean(data2$gwbush00, na.rm = TRUE))
+data2$occattend[is.na(data2$occattend)] <- round(mean(data2$occattend, na.rm = TRUE))
+data2$regattend[is.na(data2$regattend)] <- round(mean(data2$regattend, na.rm = TRUE))
+data2$unem10[is.na(data2$unem10)] <- round(mean(data2$unem10, na.rm = TRUE))
+```
+
+From the above data we are replacing the missing values with mean of columns for numeric attributes
+
+
+```{r}
+Modes <- function(x) {
+  ux <- na.omit(unique(x))
+  tab <- tabulate(match(x, ux));ux[tab == max(tab)]
+}
+
+```
+
+
+```{r}
+data2$workstat[is.na(data2$workstat)]<- Modes(data2$workstat)
+data2$divorce[is.na(data2$divorce)]<- Modes(data2$divorce)
+data2$widowed[is.na(data2$widowed)]<- Modes(data2$widowed)
+data2$income[is.na(data2$income)]<- Modes(data2$income)
+data2$attend[is.na(data2$attend)]<- Modes(data2$attend)
+data2$owngun[is.na(data2$owngun)]<- Modes(data2$owngun)
+```
+
+The above variables are categorical so we are replacing the missing values with mode of the column
+
+```{r}
+colSums(is.na(data2))
+```
+After replacing with mean and mode we can see that there are no more  missing values in the data
+
+```{r}
+data2$vhappy<-as.factor(data2$vhappy)
+data2$mothfath16<-as.factor(data2$mothfath16)
+data2$black<-as.factor(data2$black)
+data2$gwbush04<-as.factor(data2$gwbush04)
+data2$female<-as.factor(data2$female)
+data2$blackfemale<-as.factor(data2$blackfemale)
+data2$gwbush00<-as.factor(data2$gwbush00)
+data2$occattend<-as.factor(data2$occattend)
+data2$regattend<-as.factor(data2$regattend)
+data2$y94<-as.factor(data2$y94)
+data2$y96<-as.factor(data2$y96)
+data2$y98<-as.factor(data2$y98)
+data2$y00<-as.factor(data2$y00)
+data2$y02<-as.factor(data2$y02)
+data2$y04<-as.factor(data2$y04)
+data2$y06<-as.factor(data2$y06)
+data2$unem10<-as.factor(data2$unem10)
+
+```
+
+Few of the integer variables in the dataset are being converted to factor variables
+
+```{r}
+str(data2)
+
+```
+
+```{r}
+data2$happy<-droplevels(data2$happy)
+```
+
+Here er have dropped the unused levels from the happy variable which are DK,idap and na
+
+```{r}
+
+library(ggplot2)
+
+ggplot(data2, aes(x=happy, fill=workstat))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=divorce))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=widowed))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=reg16))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=income))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=region))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=attend))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=owngun))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=vhappy))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=mothfath16))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=black))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=gwbush04))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=female))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=blackfemale))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=gwbush00))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=occattend))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=regattend))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=y94))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=y98))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=y00))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=y02))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=y04))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=y06))+geom_bar(position = "dodge")
+ggplot(data2, aes(x=happy, fill=unem10))+geom_bar(position = "dodge")
+
+```
+
+Barplots are used to visualize the relationship between factor variables
+
+```{r}
+boxplot(data2$prestige~data2$happy)
+boxplot(data2$educ~data2$happy)
+boxplot(data2$babies~data2$happy)
+boxplot(data2$preteen~data2$happy)
+boxplot(data2$teens~data2$happy)
+boxplot(data2$tvhours~data2$happy)
+
+```
+Boxplots are used to establish the relationship between factor and numeric variables
+
+```{r}
+
+levels(data2$happy)[levels(data2$happy)=="pretty happy"]<-"very happy"
+
+
+```
+
+Here we have reduced the levels of happy variable from three to two as "pretty happy" and "very happy" are quite similar, so we merged them into one and with two levels it also hepls us to find percision, recall  
+
+
+```{r}
+set.seed(123)
+library(lattice)
+library(caret)
+train.index=createDataPartition(data2$happy, p=0.7, list = FALSE)
+data2_train<-data2[train.index, ]
+data2_test <-data2[-train.index, ]
+data2_train_labels = data2[train.index, 14]
+data2_test_labels = data2[-train.index,14]
+
+```
+
+We have split the data to 70% training and 30% testing 
+
+#LOGISTIC REGRESSION
+
+```{r}
+set.seed(1)
+data2_logistic<-glm(happy~., data=data2_train, family = "binomial")
+summary(data2_logistic)
+
+```
+
+
+```{r}
+data2_pred<-predict(data2_logistic, data2_test, type = "response")
+
+```
+
+
+
+```{r}
+data2_new_label=factor(ifelse(data2_pred>0.5, "1","0"))
+
+```
+
+
+```{r}
+set.seed(1)
+actuallabel<-data2_test$happy
+t=table(data2_new_label,actuallabel)
+t
+
+```
+From the table we will get the true positive value, true negative, false positive and false negative
+
+```{r}
+TP<-4501
+FN<-14
+FP<-609
+TN<-16
+accuracy_logistic<-(TP+TN)/(TP+TN+FP+FN)
+accuracy_logistic
+```
+The accuracy is 0.8787938
+
+```{r}
+percision_logistic<-TP/(TP+FP)
+percision_logistic
+
+```
+The percision is 0.8808219
+
+```{r}
+recall_logistic<-TP/(TP+FN)
+recall_logistic
+```
+The recall is 0.9968992
+
+```{r}
+library(pROC)
+auc(data2_test$happy, data2_pred)
+
+```
+AUC is 0.7807
+
+#RANDOM FOREST
+
+```{r}
+set.seed(1)
+library(randomForest)
+data2_rf <- randomForest(happy ~ ., data = data2_train)
+
+```
+
+
+```{r}
+data2_rf
+```
+
+```{r}
+set.seed(1)
+data2_rf_predictions=predict(data2_rf, data2_test)
+
+```
+
+```{r}
+table(data2_rf_predictions,data2_test$happy)
+
+```
+
+```{r}
+TP<-4508
+FN<-7
+FP<-623
+TN<-2
+accuracy_random<-(TP+TN)/(TP+TN+FP+FN)
+accuracy_random
+```
+The accuracy is 0.8774319
+
+```{r}
+percision_random<-TP/(TP+FP)
+percision_random
+
+```
+The percision is 0.8785812
+```{r}
+recall_random<-TP/(TP+FN)
+recall_random
+```
+The recall is 0.9984496
+
+```{r}
+library(pROC)
+auc(data2_test$happy, as.numeric(data2_rf_predictions))
+
+```
+The AUC is 0.5008
+
+#SVM
+
+```{r}
+library(kernlab)
+data2_svm <- ksvm(happy ~ ., data = data2_train, kernel = "vanilladot")
+
+```
+
+```{r}
+data2_svm
+```
+
+```{r}
+svm_pred<-predict(data2_svm,data2_test)
+
+```
+
+
+```{r}
+table(svm_pred, data2_test$happy)
+
+```
+
+
+```{r}
+TP<-4515
+FN<-0
+FP<-625
+TN<-0
+accuracy_svm<-(TP+TN)/(TP+TN+FP+FN)
+accuracy_svm
+```
+The accuracy is 0.8784047
+
+```{r}
+percision_svm<-TP/(TP+FP)
+percision_svm
+
+```
+The percision is 0.8784047
+```{r}
+recall_svm<-TP/(TP+FN)
+recall_svm
+```
+The recall is 1
+
+```{r}
+
+auc(data2_test$happy, as.numeric(svm_pred))
+
+
+```
+The AUC is 0.5
+
