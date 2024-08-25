@@ -1,4 +1,4 @@
-# Happiness dataset Analysis Using Machine-Learning
+# Predicting Happiness: Analyzing Socio-Economic Determinants and Model Performance
 
 ### Project Overview:
 
